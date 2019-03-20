@@ -430,11 +430,44 @@ namespace mbit_电机类 {
 
     //-----------------------------------------------------------------
     let initialized = false
-
+    const PCA9685_ADD = 0x41
+    const MODE1 = 0x00
+    const PRESCALE = 0xFE
+    const LED0_ON_L = 0x06
+    
     function initPCA9685(): void {
         i2cwrite(PCA9685_ADD, MODE1, 0x00)
         setFreq(50);
         initialized = true
+    }
+
+    function setFreq(freq: number): void {
+        // Constrain the frequency
+        let prescaleval = 25000000;
+        prescaleval /= 4096;
+        prescaleval /= freq;
+        prescaleval -= 1;
+        let prescale = prescaleval; //Math.Floor(prescaleval + 0.5);
+        let oldmode = i2cread(PCA9685_ADD, MODE1);
+        let newmode = (oldmode & 0x7F) | 0x10; // sleep
+        i2cwrite(PCA9685_ADD, MODE1, newmode); // go to sleep
+        i2cwrite(PCA9685_ADD, PRESCALE, prescale); // set the prescaler
+        i2cwrite(PCA9685_ADD, MODE1, oldmode);
+        control.waitMicros(5000);
+        i2cwrite(PCA9685_ADD, MODE1, oldmode | 0xa1);
+    }
+
+    function i2cread(addr: number, reg: number) {
+        pins.i2cWriteNumber(addr, reg, NumberFormat.UInt8BE);
+        let val = pins.i2cReadNumber(addr, NumberFormat.UInt8BE);
+        return val;
+    }
+
+    function i2cwrite(addr: number, reg: number, value: number) {
+        let buf = pins.createBuffer(2)
+        buf[0] = reg
+        buf[1] = value
+        pins.i2cWriteBuffer(addr, buf)
     }
 
     function Car_run(speed1: number, speed2: number) {
@@ -467,6 +500,26 @@ namespace mbit_电机类 {
         buf[3] = off & 0xff;
         buf[4] = (off >> 8) & 0xff;
         pins.i2cWriteBuffer(PCA9685_ADD, buf);
+    }
+
+    //% blockId=mbit_CarCtrlSpeed3 block="CarCtrlSpeed3|speed1 %speed1"
+    //% weight=91
+    //% blockGap=10
+    //% speed1.min=0 speed1.max=255 speed2.min=0 speed2.max=255
+    //% color="#006400"
+    //% name.fieldEditor="gridpicker" name.fieldOptions.columns=10
+    export function CarCtrlSpeed3(speed1: number): void {
+        Car_run(speed1, 0);
+    }
+
+    //% blockId=mbit_CarCtrlSpeed4 block="CarCtrlSpeed4|speed2 %speed2"
+    //% weight=91
+    //% blockGap=10
+    //% speed1.min=0 speed1.max=255 speed2.min=0 speed2.max=255
+    //% color="#006400"
+    //% name.fieldEditor="gridpicker" name.fieldOptions.columns=10
+    export function CarCtrlSpeed4(speed2: number): void {
+        Car_run(0, speed2);
     }
 
 }
@@ -1098,47 +1151,4 @@ namespace mbit_小车类 {
             case CarState.Car_SpinRight: Car_spinright(speed1, speed2); break;
         }
     }
-
-    //% blockId=mbit_CarCtrlSpeed3 block="CarCtrlSpeed3|speed1 %speed1"
-    //% weight=91
-    //% blockGap=10
-    //% speed1.min=0 speed1.max=255 speed2.min=0 speed2.max=255
-    //% color="#006400"
-    //% name.fieldEditor="gridpicker" name.fieldOptions.columns=10
-    export function CarCtrlSpeed3(speed1: number): void {
-        // switch (index)
-        // {
-        //     case CarState.Car_Run: Car_run(speed1, speed2); break;
-        //     case CarState.Car_Back: Car_back(speed1, speed2); break;
-        //     case CarState.Car_Left: Car_left(speed1, speed2); break;
-        //     case CarState.Car_Right: Car_right(speed1, speed2); break;
-        //     case CarState.Car_Stop: Car_stop(); break;
-        //     case CarState.Car_SpinLeft: Car_spinleft(speed1, speed2); break;
-        //     case CarState.Car_SpinRight: Car_spinright(speed1, speed2); break;
-        // }
-
-        Car_run(speed1, 0);
-    }
-
-    //% blockId=mbit_CarCtrlSpeed4 block="CarCtrlSpeed4|speed2 %speed2"
-    //% weight=91
-    //% blockGap=10
-    //% speed1.min=0 speed1.max=255 speed2.min=0 speed2.max=255
-    //% color="#006400"
-    //% name.fieldEditor="gridpicker" name.fieldOptions.columns=10
-    export function CarCtrlSpeed4(speed2: number): void {
-        // switch (index)
-        // {
-        //     case CarState.Car_Run: Car_run(speed1, speed2); break;
-        //     case CarState.Car_Back: Car_back(speed1, speed2); break;
-        //     case CarState.Car_Left: Car_left(speed1, speed2); break;
-        //     case CarState.Car_Right: Car_right(speed1, speed2); break;
-        //     case CarState.Car_Stop: Car_stop(); break;
-        //     case CarState.Car_SpinLeft: Car_spinleft(speed1, speed2); break;
-        //     case CarState.Car_SpinRight: Car_spinright(speed1, speed2); break;
-        // }
-
-        Car_run(0, speed2);
-    }
-
 }

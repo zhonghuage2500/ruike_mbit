@@ -19,6 +19,8 @@
 
     "mbit_电机类.Fan|block": "风扇|引脚 %pin|速度 %value",
     "mbit_电机类.Servo|block": "舵机|引脚 %pin|角度 %value",
+    "mbit_电机类.CarCtrlSpeed3|block": "电机控制|左电机速度 %speed1",
+    "mbit_电机类.CarCtrlSpeed4|block": "电机控制|右电机速度 %speed2",
 
     "mbit_小车类.RGB_Car_Big|block": "小车RGB探照灯|红色 %value1|绿色 %value2|蓝色 %value3",
     "mbit_小车类.RGB_Car_Big2|block": "小车RGB探照灯|选择车灯颜色 %value",
@@ -30,8 +32,6 @@
     "mbit_小车类.Servo_Car|block": "小车舵机|编号 %num|角度 %value",
     "mbit_小车类.CarCtrl|block": "小车控制|%index",
     "mbit_小车类.CarCtrlSpeed|block": "小车控制|%index|速度 %speed",
-    "mbit_小车类.CarCtrlSpeed2|block": "小车控制|%index|左电机速度 %speed1|右电机速度 %speed2",
-    "mbit_小车类.CarCtrlSpeed3|block": "电机控制|左电机速度 %speed1",
-    "mbit_小车类.CarCtrlSpeed4|block": "电机控制|右电机速度 %speed2"
+    "mbit_小车类.CarCtrlSpeed2|block": "小车控制|%index|左电机速度 %speed1|右电机速度 %speed2"
 
 }
