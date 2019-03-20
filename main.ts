@@ -429,12 +429,67 @@ namespace mbit_电机类 {
     }
 
     //-----------------------------------------------------------------
-    let initialized = false
+
+    //% blockId=mbit_CarCtrlSpeed3 block="CarCtrlSpeed3|speed1 %speed1"
+    //% weight=91
+    //% blockGap=10
+    //% speed1.min=0 speed1.max=255 speed2.min=0 speed2.max=255
+    //% color="#006400"
+    //% name.fieldEditor="gridpicker" name.fieldOptions.columns=10
+    export function CarCtrlSpeed3(speed1: number): void {
+        Car_run(speed1, 0);
+    }
+
+    //% blockId=mbit_CarCtrlSpeed4 block="CarCtrlSpeed4|speed2 %speed2"
+    //% weight=91
+    //% blockGap=10
+    //% speed1.min=0 speed1.max=255 speed2.min=0 speed2.max=255
+    //% color="#006400"
+    //% name.fieldEditor="gridpicker" name.fieldOptions.columns=10
+    export function CarCtrlSpeed4(speed2: number): void {
+        Car_run(0, speed2);
+    }
+
+    //-----------------------------------------------------------------
+
     const PCA9685_ADD = 0x41
     const MODE1 = 0x00
-    const PRESCALE = 0xFE
+    const MODE2 = 0x01
+    const SUBADR1 = 0x02
+    const SUBADR2 = 0x03
+    const SUBADR3 = 0x04
     const LED0_ON_L = 0x06
-    
+    const LED0_ON_H = 0x07
+    const LED0_OFF_L = 0x08
+    const LED0_OFF_H = 0x09
+    const ALL_LED_ON_L = 0xFA
+    const ALL_LED_ON_H = 0xFB
+    const ALL_LED_OFF_L = 0xFC
+    const ALL_LED_OFF_H = 0xFD
+    const PRESCALE = 0xFE
+
+    let initialized = false
+    let yahStrip: neopixel.Strip;
+
+    function i2cwrite(addr: number, reg: number, value: number) {
+        let buf = pins.createBuffer(2)
+        buf[0] = reg
+        buf[1] = value
+        pins.i2cWriteBuffer(addr, buf)
+    }
+
+    function i2ccmd(addr: number, value: number) {
+        let buf = pins.createBuffer(1)
+        buf[0] = value
+        pins.i2cWriteBuffer(addr, buf)
+    }
+
+    function i2cread(addr: number, reg: number) {
+        pins.i2cWriteNumber(addr, reg, NumberFormat.UInt8BE);
+        let val = pins.i2cReadNumber(addr, NumberFormat.UInt8BE);
+        return val;
+    }
+
     function initPCA9685(): void {
         i2cwrite(PCA9685_ADD, MODE1, 0x00)
         setFreq(50);
@@ -457,17 +512,19 @@ namespace mbit_电机类 {
         i2cwrite(PCA9685_ADD, MODE1, oldmode | 0xa1);
     }
 
-    function i2cread(addr: number, reg: number) {
-        pins.i2cWriteNumber(addr, reg, NumberFormat.UInt8BE);
-        let val = pins.i2cReadNumber(addr, NumberFormat.UInt8BE);
-        return val;
-    }
-
-    function i2cwrite(addr: number, reg: number, value: number) {
-        let buf = pins.createBuffer(2)
-        buf[0] = reg
-        buf[1] = value
-        pins.i2cWriteBuffer(addr, buf)
+    function setPwm(channel: number, on: number, off: number): void {
+        if (channel < 0 || channel > 15)
+            return;
+        if (!initialized) {
+            initPCA9685();
+        }
+        let buf = pins.createBuffer(5);
+        buf[0] = LED0_ON_L + 4 * channel;
+        buf[1] = on & 0xff;
+        buf[2] = (on >> 8) & 0xff;
+        buf[3] = off & 0xff;
+        buf[4] = (off >> 8) & 0xff;
+        pins.i2cWriteBuffer(PCA9685_ADD, buf);
     }
 
     function Car_run(speed1: number, speed2: number) {
@@ -487,39 +544,95 @@ namespace mbit_电机类 {
         setPwm(14, 0, 0);
     }
 
-    function setPwm(channel: number, on: number, off: number): void {
-        if (channel < 0 || channel > 15)
-            return;
-        if (!initialized) {
-            initPCA9685();
+    function Car_back(speed1: number, speed2: number) {
+        speed1 = speed1 * 16; // map 350 to 4096
+        speed2 = speed2 * 16;
+        if (speed1 >= 4096) {
+            speed1 = 4095
         }
-        let buf = pins.createBuffer(5);
-        buf[0] = LED0_ON_L + 4 * channel;
-        buf[1] = on & 0xff;
-        buf[2] = (on >> 8) & 0xff;
-        buf[3] = off & 0xff;
-        buf[4] = (off >> 8) & 0xff;
-        pins.i2cWriteBuffer(PCA9685_ADD, buf);
+        if (speed2 >= 4096) {
+            speed2 = 4095
+        }
+        setPwm(12, 0, 0);
+        setPwm(13, 0, speed1);
+
+        setPwm(15, 0, 0);
+        setPwm(14, 0, speed2);
     }
 
-    //% blockId=mbit_CarCtrlSpeed3 block="CarCtrlSpeed3|speed1 %speed1"
-    //% weight=91
-    //% blockGap=10
-    //% speed1.min=0 speed1.max=255 speed2.min=0 speed2.max=255
-    //% color="#006400"
-    //% name.fieldEditor="gridpicker" name.fieldOptions.columns=10
-    export function CarCtrlSpeed3(speed1: number): void {
-        Car_run(speed1, 0);
+    function Car_left(speed1: number, speed2: number) {
+        speed1 = speed1 * 16; // map 350 to 4096
+        speed2 = speed2 * 16;
+        if (speed1 >= 4096) {
+            speed1 = 4095
+        }
+        if (speed2 >= 4096) {
+            speed2 = 4095
+        }
+
+        setPwm(12, 0, speed1);
+        setPwm(13, 0, 0);
+
+        setPwm(15, 0, speed2);
+        setPwm(14, 0, 0);
     }
 
-    //% blockId=mbit_CarCtrlSpeed4 block="CarCtrlSpeed4|speed2 %speed2"
-    //% weight=91
-    //% blockGap=10
-    //% speed1.min=0 speed1.max=255 speed2.min=0 speed2.max=255
-    //% color="#006400"
-    //% name.fieldEditor="gridpicker" name.fieldOptions.columns=10
-    export function CarCtrlSpeed4(speed2: number): void {
-        Car_run(0, speed2);
+    function Car_right(speed1: number, speed2: number) {
+        speed1 = speed1 * 16; // map 350 to 4096
+        speed2 = speed2 * 16;
+        if (speed1 >= 4096) {
+            speed1 = 4095
+        }
+        if (speed2 >= 4096) {
+            speed2 = 4095
+        }
+
+        setPwm(12, 0, speed1);
+        setPwm(13, 0, 0);
+
+        setPwm(15, 0, speed2);
+        setPwm(14, 0, 0);
+    }
+
+    function Car_stop() {
+        setPwm(12, 0, 0);
+        setPwm(13, 0, 0);
+
+        setPwm(15, 0, 0);
+        setPwm(14, 0, 0);
+    }
+
+    function Car_spinleft(speed1: number, speed2: number) {
+        speed1 = speed1 * 16; // map 350 to 4096
+        speed2 = speed2 * 16;
+        if (speed1 >= 4096) {
+            speed1 = 4095
+        }
+        if (speed2 >= 4096) {
+            speed2 = 4095
+        }
+
+        setPwm(12, 0, 0);
+        setPwm(13, 0, speed1);
+
+        setPwm(15, 0, speed2);
+        setPwm(14, 0, 0);
+    }
+
+    function Car_spinright(speed1: number, speed2: number) {
+        speed1 = speed1 * 16; // map 350 to 4096
+        speed2 = speed2 * 16;
+        if (speed1 >= 4096) {
+            speed1 = 4095
+        }
+        if (speed2 >= 4096) {
+            speed2 = 4095
+        }
+        setPwm(12, 0, speed1);
+        setPwm(13, 0, 0);
+
+        setPwm(15, 0, 0);
+        setPwm(14, 0, speed2);
     }
 
 }
