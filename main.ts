@@ -1044,21 +1044,46 @@ namespace mbit_小车类 {
             case CarState.Car_SpinRight: Car_spinright(speed, speed); break;
         }
     }
-    //% blockId=mbit_CarCtrlSpeed2 block="CarCtrlSpeed2|%index|speed1 %speed1|speed2 %speed2"
+    //% blockId=mbit_CarCtrlSpeed2 block="CarCtrlSpeed2|speed1 %speed1"
     //% weight=91
     //% blockGap=10
     //% speed1.min=0 speed1.max=255 speed2.min=0 speed2.max=255
     //% color="#006400"
     //% name.fieldEditor="gridpicker" name.fieldOptions.columns=10
-    export function CarCtrlSpeed2(index: CarState, speed1: number, speed2: number): void {
-        switch (index) {
-            case CarState.Car_Run: Car_run(speed1, speed2); break;
-            case CarState.Car_Back: Car_back(speed1, speed2); break;
-            case CarState.Car_Left: Car_left(speed1, speed2); break;
-            case CarState.Car_Right: Car_right(speed1, speed2); break;
-            case CarState.Car_Stop: Car_stop(); break;
-            case CarState.Car_SpinLeft: Car_spinleft(speed1, speed2); break;
-            case CarState.Car_SpinRight: Car_spinright(speed1, speed2); break;
-        }
+    //export function CarCtrlSpeed2(index: CarState, speed1: number, speed2: number): void {
+    export function CarCtrlSpeed2(speed1: number): void {
+        // switch (index)
+        // {
+        //     case CarState.Car_Run: Car_run(speed1, speed2); break;
+        //     case CarState.Car_Back: Car_back(speed1, speed2); break;
+        //     case CarState.Car_Left: Car_left(speed1, speed2); break;
+        //     case CarState.Car_Right: Car_right(speed1, speed2); break;
+        //     case CarState.Car_Stop: Car_stop(); break;
+        //     case CarState.Car_SpinLeft: Car_spinleft(speed1, speed2); break;
+        //     case CarState.Car_SpinRight: Car_spinright(speed1, speed2); break;
+        // }
+
+        Car_run(speed1, 0);
+    }
+    //% blockId=mbit_CarCtrlSpeed3 block="CarCtrlSpeed3|speed2 %speed2"
+    //% weight=91
+    //% blockGap=10
+    //% speed1.min=0 speed1.max=255 speed2.min=0 speed2.max=255
+    //% color="#006400"
+    //% name.fieldEditor="gridpicker" name.fieldOptions.columns=10
+    //export function CarCtrlSpeed3(index: CarState, speed1: number, speed2: number): void {
+    export function CarCtrlSpeed3(speed2: number): void {
+        // switch (index)
+        // {
+        //     case CarState.Car_Run: Car_run(speed1, speed2); break;
+        //     case CarState.Car_Back: Car_back(speed1, speed2); break;
+        //     case CarState.Car_Left: Car_left(speed1, speed2); break;
+        //     case CarState.Car_Right: Car_right(speed1, speed2); break;
+        //     case CarState.Car_Stop: Car_stop(); break;
+        //     case CarState.Car_SpinLeft: Car_spinleft(speed1, speed2); break;
+        //     case CarState.Car_SpinRight: Car_spinright(speed1, speed2); break;
+        // }
+
+        Car_run(0, speed2);
     }
 }
