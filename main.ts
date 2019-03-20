@@ -430,46 +430,119 @@ namespace mbit_电机类 {
 
     //-----------------------------------------------------------------
 
-    //% blockId=mbit_CarCtrlSpeed3 block="CarCtrlSpeed3|speed1 %speed1"
-    //% weight=91
-    //% blockGap=10
-    //% speed1.min=0 speed1.max=255 speed2.min=0 speed2.max=255
-    //% color="#006400"
-    //% name.fieldEditor="gridpicker" name.fieldOptions.columns=10
-    export function CarCtrlSpeed3(speed1: number): void {
-        Car_run(speed1, 0);
-    }
-
-    //% blockId=mbit_CarCtrlSpeed4 block="CarCtrlSpeed4|speed2 %speed2"
-    //% weight=91
-    //% blockGap=10
-    //% speed1.min=0 speed1.max=255 speed2.min=0 speed2.max=255
-    //% color="#006400"
-    //% name.fieldEditor="gridpicker" name.fieldOptions.columns=10
-    export function CarCtrlSpeed4(speed2: number): void {
-        Car_run(0, speed2);
-    }
-
-    //-----------------------------------------------------------------
-
     const PCA9685_ADD = 0x41
     const MODE1 = 0x00
     const MODE2 = 0x01
     const SUBADR1 = 0x02
     const SUBADR2 = 0x03
     const SUBADR3 = 0x04
+
     const LED0_ON_L = 0x06
     const LED0_ON_H = 0x07
     const LED0_OFF_L = 0x08
     const LED0_OFF_H = 0x09
+
     const ALL_LED_ON_L = 0xFA
     const ALL_LED_ON_H = 0xFB
     const ALL_LED_OFF_L = 0xFC
     const ALL_LED_OFF_H = 0xFD
+
     const PRESCALE = 0xFE
 
     let initialized = false
     let yahStrip: neopixel.Strip;
+
+    export enum enColor {
+
+        //% blockId="OFF" block="灭"
+        OFF = 0,
+        //% blockId="Red" block="红色"
+        Red,
+        //% blockId="Green" block="绿色"
+        Green,
+        //% blockId="Blue" block="蓝色"
+        Blue,
+        //% blockId="White" block="白色"
+        White,
+        //% blockId="Cyan" block="青色"
+        Cyan,
+        //% blockId="Pinkish" block="品红"
+        Pinkish,
+        //% blockId="Yellow" block="黄色"
+        Yellow,
+
+    }
+    export enum enMusic {
+
+        dadadum = 0,
+        entertainer,
+        prelude,
+        ode,
+        nyan,
+        ringtone,
+        funk,
+        blues,
+
+        birthday,
+        wedding,
+        funereal,
+        punchline,
+        baddy,
+        chase,
+        ba_ding,
+        wawawawaa,
+        jump_up,
+        jump_down,
+        power_up,
+        power_down
+    }
+    export enum enPos {
+
+        //% blockId="LeftState" block="左边状态"
+        LeftState = 0,
+        //% blockId="RightState" block="右边状态"
+        RightState = 1
+    }
+
+    export enum enLineState {
+        //% blockId="White" block="白线"
+        White = 0,
+        //% blockId="Black" block="黑线"
+        Black = 1
+
+    }
+
+    export enum enAvoidState {
+        //% blockId="OBSTACLE" block="有障碍物"
+        OBSTACLE = 0,
+        //% blockId="NOOBSTACLE" block="无障碍物"
+        NOOBSTACLE = 1
+
+    }
+
+
+    export enum enServo {
+
+        S1 = 1,
+        S2,
+        S3
+    }
+    export enum CarState {
+        //% blockId="Car_Run" block="前行"
+        Car_Run = 1,
+        //% blockId="Car_Back" block="后退"
+        Car_Back = 2,
+        //% blockId="Car_Left" block="左转"
+        Car_Left = 3,
+        //% blockId="Car_Right" block="右转"
+        Car_Right = 4,
+        //% blockId="Car_Stop" block="停止"
+        Car_Stop = 5,
+        //% blockId="Car_SpinLeft" block="原地左旋"
+        Car_SpinLeft = 6,
+        //% blockId="Car_SpinRight" block="原地右旋"
+        Car_SpinRight = 7
+    }
 
     function i2cwrite(addr: number, reg: number, value: number) {
         let buf = pins.createBuffer(2)
@@ -527,7 +600,9 @@ namespace mbit_电机类 {
         pins.i2cWriteBuffer(PCA9685_ADD, buf);
     }
 
+
     function Car_run(speed1: number, speed2: number) {
+
         speed1 = speed1 * 16; // map 350 to 4096
         speed2 = speed2 * 16;
         if (speed1 >= 4096) {
@@ -542,9 +617,15 @@ namespace mbit_电机类 {
 
         setPwm(15, 0, speed2);
         setPwm(14, 0, 0);
+        //pins.digitalWritePin(DigitalPin.P16, 1);
+        // pins.analogWritePin(AnalogPin.P1, 1023-speed); //速度控制
+
+        // pins.analogWritePin(AnalogPin.P0, speed);//速度控制
+        // pins.digitalWritePin(DigitalPin.P8, 0);
     }
 
     function Car_back(speed1: number, speed2: number) {
+
         speed1 = speed1 * 16; // map 350 to 4096
         speed2 = speed2 * 16;
         if (speed1 >= 4096) {
@@ -558,9 +639,16 @@ namespace mbit_电机类 {
 
         setPwm(15, 0, 0);
         setPwm(14, 0, speed2);
+
+        //pins.digitalWritePin(DigitalPin.P16, 0);
+        //pins.analogWritePin(AnalogPin.P1, speed); //速度控制
+
+        //pins.analogWritePin(AnalogPin.P0, 1023 - speed);//速度控制
+        //pins.digitalWritePin(DigitalPin.P8, 1);
     }
 
     function Car_left(speed1: number, speed2: number) {
+
         speed1 = speed1 * 16; // map 350 to 4096
         speed2 = speed2 * 16;
         if (speed1 >= 4096) {
@@ -575,9 +663,16 @@ namespace mbit_电机类 {
 
         setPwm(15, 0, speed2);
         setPwm(14, 0, 0);
+
+        //pins.analogWritePin(AnalogPin.P0, speed);
+        //pins.digitalWritePin(DigitalPin.P8, 0);
+
+        //pins.digitalWritePin(DigitalPin.P16, 0);
+        //pins.digitalWritePin(DigitalPin.P1, 0);
     }
 
     function Car_right(speed1: number, speed2: number) {
+
         speed1 = speed1 * 16; // map 350 to 4096
         speed2 = speed2 * 16;
         if (speed1 >= 4096) {
@@ -592,17 +687,28 @@ namespace mbit_电机类 {
 
         setPwm(15, 0, speed2);
         setPwm(14, 0, 0);
+        //pins.digitalWritePin(DigitalPin.P0, 0);
+        //pins.digitalWritePin(DigitalPin.P8, 0);
+
+        //pins.digitalWritePin(DigitalPin.P16, 1);
+        // pins.analogWritePin(AnalogPin.P1, 1023 - speed);
     }
 
     function Car_stop() {
+
         setPwm(12, 0, 0);
         setPwm(13, 0, 0);
 
         setPwm(15, 0, 0);
         setPwm(14, 0, 0);
+        //pins.digitalWritePin(DigitalPin.P0, 0);
+        //pins.digitalWritePin(DigitalPin.P8, 0);
+        //pins.digitalWritePin(DigitalPin.P16, 0);
+        //pins.digitalWritePin(DigitalPin.P1, 0);
     }
 
     function Car_spinleft(speed1: number, speed2: number) {
+
         speed1 = speed1 * 16; // map 350 to 4096
         speed2 = speed2 * 16;
         if (speed1 >= 4096) {
@@ -617,9 +723,16 @@ namespace mbit_电机类 {
 
         setPwm(15, 0, speed2);
         setPwm(14, 0, 0);
+
+        //pins.analogWritePin(AnalogPin.P0, speed);
+        //pins.digitalWritePin(DigitalPin.P8, 0);
+
+        //pins.digitalWritePin(DigitalPin.P16, 0);
+        //pins.analogWritePin(AnalogPin.P1, speed);
     }
 
     function Car_spinright(speed1: number, speed2: number) {
+
         speed1 = speed1 * 16; // map 350 to 4096
         speed2 = speed2 * 16;
         if (speed1 >= 4096) {
@@ -633,6 +746,34 @@ namespace mbit_电机类 {
 
         setPwm(15, 0, 0);
         setPwm(14, 0, speed2);
+        //pins.analogWritePin(AnalogPin.P0, 1023-speed);
+        //pins.digitalWritePin(DigitalPin.P8, 1);
+
+        //pins.digitalWritePin(DigitalPin.P16, 1);
+        //pins.analogWritePin(AnalogPin.P1, 1023-speed);
+
+    }
+
+    //-----------------------------------------------------------------
+
+    //% blockId=mbit_CarCtrlSpeed3 block="CarCtrlSpeed3|speed1 %speed1"
+    //% weight=91
+    //% blockGap=10
+    //% speed1.min=0 speed1.max=255 speed2.min=0 speed2.max=255
+    //% color="#006400"
+    //% name.fieldEditor="gridpicker" name.fieldOptions.columns=10
+    export function CarCtrlSpeed3(speed1: number): void {
+        Car_run(speed1, 0);
+    }
+
+    //% blockId=mbit_CarCtrlSpeed4 block="CarCtrlSpeed4|speed2 %speed2"
+    //% weight=91
+    //% blockGap=10
+    //% speed1.min=0 speed1.max=255 speed2.min=0 speed2.max=255
+    //% color="#006400"
+    //% name.fieldEditor="gridpicker" name.fieldOptions.columns=10
+    export function CarCtrlSpeed4(speed2: number): void {
+        Car_run(0, speed2);
     }
 
 }
