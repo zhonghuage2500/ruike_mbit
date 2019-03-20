@@ -381,7 +381,7 @@ namespace mbit_音乐类 {
         Beep
     }
 
-    //% blockId=mbit_Buzzer block="Buzzer|pin %pin|value %value"
+    //% blockId=mbit_Buzzer block="Buzzer|pin %pin"
     //% weight=100
     //% blockGap=10 
     //% color="#D2691E"
@@ -390,7 +390,7 @@ namespace mbit_音乐类 {
     export function Buzzer(pin: DigitalPin, value: enBuzzer): void {
 
         pins.setPull(pin, PinPullMode.PullNone);
-        pins.digitalWritePin(pin, value);
+        //pins.digitalWritePin(pin, value);
 
     }
 
