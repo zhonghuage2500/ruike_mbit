@@ -17,8 +17,6 @@
 
     "mbit_音乐类.Buzzer|block": "有源蜂鸣器|引脚 %pin|值 %value",
 
-    // "mbit_电机类.Fan|block": "风扇|引脚 %pin|速度 %value",
-    // "mbit_电机类.Servo|block": "舵机|引脚 %pin|角度 %value",
     "mbit_电机类.CarCtrlSpeed3|block": "电机控制|左电机速度 %speed1",
     "mbit_电机类.CarCtrlSpeed4|block": "电机控制|右电机速度 %speed2",
 
