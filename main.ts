@@ -414,9 +414,9 @@ namespace mbit_电机类 {
     //% color="#0000CD"
     //% value.min=0 value.max=1023
     //% name.fieldEditor="gridpicker" name.fieldOptions.columns=9
-    export function Fan(pin: AnalogPin, value: number): void {
-        pins.analogWritePin(pin, value);
-    }
+    // export function Fan(pin: AnalogPin, value: number): void {
+    //     pins.analogWritePin(pin, value);
+    // }
 
     //% blockId=mbit_Servo block="Servo|pin %pin|value %value"
     //% weight=100
@@ -424,9 +424,9 @@ namespace mbit_电机类 {
     //% color="#0000CD"
     //% value.min=0 value.max=180
     //% name.fieldEditor="gridpicker" name.fieldOptions.columns=9
-    export function Servo(pin: AnalogPin, value: number): void {
-        pins.servoWritePin(pin, value);
-    }
+    // export function Servo(pin: AnalogPin, value: number): void {
+    //     pins.servoWritePin(pin, value);
+    // }
 
     //-----------------------------------------------------------------
 
