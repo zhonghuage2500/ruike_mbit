@@ -392,9 +392,9 @@ namespace mbit_音乐类 {
     //% color="#D2691E"
     //% value.min=0 value.max=1
     //% name.fieldEditor="gridpicker" name.fieldOptions.columns=8
-    export function Buzzer(pin: DigitalPinMusic, value: enBuzzer): void {
+    export function Buzzer(pin: DigitalPin, value: enBuzzer): void {
 
-        pins.setPull(pin, DigitalPinMusic);
+        pins.setPull(pin, PinPullMode.PullNone);
         pins.digitalWritePin(pin, value);
 
     }
