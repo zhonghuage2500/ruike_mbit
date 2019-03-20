@@ -373,24 +373,29 @@ namespace mbit_输入类 {
 
 //% color="#D2691E" weight=22 icon="\uf001"
 namespace mbit_音乐类 {
-    export enum enBuzzer {
 
+    export enum DigitalPinMusic {
+        //% blockId="P0" block="P0"
+        P0 = 7
+    }
+
+    export enum enBuzzer {
         //% blockId="NoBeep" block="不响"
         NoBeep = 0,
         //% blockId="Beep" block="响"
         Beep
     }
 
-    //% blockId=mbit_Buzzer block="Buzzer|pin %pin"
+    //% blockId=mbit_Buzzer block="Buzzer|pin %pin|value %value"
     //% weight=100
     //% blockGap=10 
     //% color="#D2691E"
     //% value.min=0 value.max=1
     //% name.fieldEditor="gridpicker" name.fieldOptions.columns=8
-    export function Buzzer(pin: DigitalPin, value: enBuzzer): void {
+    export function Buzzer(pin: DigitalPinMusic, value: enBuzzer): void {
 
-        pins.setPull(pin, PinPullMode.PullNone);
-        //pins.digitalWritePin(pin, value);
+        pins.setPull(pin, DigitalPinMusic);
+        pins.digitalWritePin(pin, value);
 
     }
 
