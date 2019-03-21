@@ -1,35 +1,33 @@
 {
-
     "显示.LED1|block": "LED灯|引脚 %pin|状态 %value",
     "显示.LED2|block": "LED灯|引脚 %pin|亮度 %value",
     "显示.BreathLED|block": "呼吸灯|引脚 %pin",
     "显示.RGB|block": "RGB七彩灯|引脚R %pin1|引脚G %pin2|引脚B %pin3|红色 %value1|绿色 %value2|蓝色 %value3",
     "显示.RGB2|block": "RGB七彩灯|引脚R %pin1|引脚G %pin2|引脚B %pin3|显示 %value",
 
-    "mbit_输入类.TouchPad|block": "触摸开关|引脚 %pin|返回 %value",
-    "mbit_输入类.Rocker|block": "遥杆|VRX %pin1|VRY %pin2|SW %pin3|返回 %value",
-    "mbit_输入类.Button|block": "按键|引脚 %pin|返回 %value",
+    "输入.TouchPad|block": "触摸开关|引脚 %pin|返回 %value",
+    "输入.Rocker|block": "遥杆|VRX %pin1|VRY %pin2|SW %pin3|返回 %value",
+    "输入.Button|block": "按键|引脚 %pin|返回 %value",
 
-    "mbit_传感器类.Voice_Sensor|block": "声音传感器|引脚 %pin|返回 %value",
-    "mbit_传感器类.IR_Sensor|block": "红外传感器|引脚 %pin|  |%value|障碍物",
-    "mbit_传感器类.IR_Send|block": "红外发射|引脚 %pin",
-    "mbit_传感器类.Ultrasonic|block": "超声波|发射管脚 %Trig|接收管脚 %Echo",
+    "传感器.Voice_Sensor|block": "声音传感器|引脚 %pin|返回 %value",
+    "传感器.IR_Sensor|block": "红外传感器|引脚 %pin|  |%value|障碍物",
+    "传感器.IR_Send|block": "红外发射|引脚 %pin",
+    "传感器.Ultrasonic|block": "超声波|发射管脚 %Trig|接收管脚 %Echo",
 
-    "mbit_音乐类.Buzzer|block": "有源蜂鸣器|引脚 %pin|值 %value",
+    "音乐.Buzzer|block": "有源蜂鸣器|引脚 %pin|值 %value",
 
-    "mbit_电机类.CarCtrlSpeed3|block": "电机控制|左电机速度 %speed1",
-    "mbit_电机类.CarCtrlSpeed4|block": "电机控制|右电机速度 %speed2",
+    "电机.CarCtrlSpeed3|block": "电机控制|左电机速度 %speed1",
+    "电机.CarCtrlSpeed4|block": "电机控制|右电机速度 %speed2",
 
-    "mbit_小车类.RGB_Car_Big|block": "小车RGB探照灯|红色 %value1|绿色 %value2|蓝色 %value3",
-    "mbit_小车类.RGB_Car_Big2|block": "小车RGB探照灯|选择车灯颜色 %value",
-    "mbit_小车类.Ultrasonic_Car|block": "超声波返回（cm）",
-    "mbit_小车类.RGB_Car_Program|block": "七彩流水灯",
-    "mbit_小车类.Music_Car|block": "小车音乐播放|%index",
-    "mbit_小车类.Line_Sensor|block": "巡线传感器|位置 %direct|检测到 %value",
-    "mbit_小车类.Avoid_Sensor|block": "避障传感器|检测到 %value",
-    "mbit_小车类.Servo_Car|block": "小车舵机|编号 %num|角度 %value",
-    "mbit_小车类.CarCtrl|block": "小车控制|%index",
-    "mbit_小车类.CarCtrlSpeed|block": "小车控制|%index|速度 %speed",
-    "mbit_小车类.CarCtrlSpeed2|block": "小车控制|%index|左电机速度 %speed1|右电机速度 %speed2"
-
+    "小车.RGB_Car_Big|block": "小车RGB探照灯|红色 %value1|绿色 %value2|蓝色 %value3",
+    "小车.RGB_Car_Big2|block": "小车RGB探照灯|选择车灯颜色 %value",
+    "小车.Ultrasonic_Car|block": "超声波返回（cm）",
+    "小车.RGB_Car_Program|block": "七彩流水灯",
+    "小车.Music_Car|block": "小车音乐播放|%index",
+    "小车.Line_Sensor|block": "巡线传感器|位置 %direct|检测到 %value",
+    "小车.Avoid_Sensor|block": "避障传感器|检测到 %value",
+    "小车.Servo_Car|block": "小车舵机|编号 %num|角度 %value",
+    "小车.CarCtrl|block": "小车控制|%index",
+    "小车.CarCtrlSpeed|block": "小车控制|%index|速度 %speed",
+    "小车.CarCtrlSpeed2|block": "小车控制|%index|左电机速度 %speed1|右电机速度 %speed2"
 }
