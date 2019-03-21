@@ -408,26 +408,6 @@ namespace mbit_音乐类 {
 //% color="#0000CD" weight=21 icon="\uf185"
 namespace mbit_电机类 {
 
-    //% blockId=mbit_Fan block="Fan|pin %pin|speed %value"
-    //% weight=100
-    //% blockGap=10
-    //% color="#0000CD"
-    //% value.min=0 value.max=1023
-    //% name.fieldEditor="gridpicker" name.fieldOptions.columns=9
-    export function Fan(pin: AnalogPin, value: number): void {
-        pins.analogWritePin(pin, value);
-    }
-
-    //% blockId=mbit_Servo block="Servo|pin %pin|value %value"
-    //% weight=100
-    //% blockGap=10
-    //% color="#0000CD"
-    //% value.min=0 value.max=180
-    //% name.fieldEditor="gridpicker" name.fieldOptions.columns=9
-    export function Servo(pin: AnalogPin, value: number): void {
-        pins.servoWritePin(pin, value);
-    }
-
     //-----------------------------------------------------------------
 
     const PCA9685_ADD = 0x41
